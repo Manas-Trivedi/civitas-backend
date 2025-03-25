@@ -1,0 +1,8 @@
+fastapi
+uvicorn
+torch
+transformers
+requests
+firebase-admin
+python-dotenv
+google-genai
