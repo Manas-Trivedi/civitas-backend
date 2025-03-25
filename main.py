@@ -14,7 +14,10 @@ app = FastAPI()
 # Add CORS middleware
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=[
+        "https://civita5.netlify.app",    # ✅ Your frontend on Netlify
+        "https://backend-14zy.onrender.com"  # ✅ Your backend on Render
+    ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
