@@ -12,7 +12,9 @@ router = APIRouter()
 def fetch_reddit(subreddit: str = "confessions", limit: int = 5):
     try:
         url = f"https://www.reddit.com/r/{subreddit}/new.json?limit={limit}"
-        headers = {"User-Agent": "Civitas/0.1"}
+        headers = {
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+        }
 
         # Log the request details
         logging.info(f"Fetching Reddit posts from URL: {url} with headers: {headers}")
