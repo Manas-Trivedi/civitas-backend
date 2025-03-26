@@ -3,6 +3,7 @@ import base64
 import json
 import firebase_admin
 from firebase_admin import credentials
+from firebase_admin import firestore
 
 # Decode the Base64 environment variable
 firebase_creds = base64.b64decode(os.getenv("FIREBASE_CREDS_BASE64")).decode("utf-8")
