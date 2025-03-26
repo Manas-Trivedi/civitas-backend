@@ -2,10 +2,13 @@ import requests
 from fastapi import APIRouter, HTTPException
 import logging
 import traceback
+from dotenv import load_dotenv
+import os
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)  # Change to DEBUG for more verbosity
 
+load_dotenv()
 router = APIRouter()
 
 @router.get("/fetch-reddit")
@@ -15,11 +18,12 @@ def fetch_reddit(subreddit: str = "confessions", limit: int = 5):
         headers = {
             "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
         }
+        auth = (os.getenv("REDDIT_USERNAME"), os.getenv("REDDIT_CLIENT_SECRET"))
 
         # Log the request details
         logging.info(f"Fetching Reddit posts from URL: {url} with headers: {headers}")
 
-        response = requests.get(url, headers=headers)
+        response = requests.get(url, headers=headers, auth=auth)
 
         # Log the response details
         logging.info(f"Reddit API Response: {response.status_code}")
