@@ -1,14 +1,17 @@
-from dotenv import load_dotenv
 import os
+import base64
+import json
 import firebase_admin
-from firebase_admin import credentials, firestore
+from firebase_admin import credentials
 
-# Load environment variables
-load_dotenv()
+# Decode the Base64 environment variable
+firebase_creds = base64.b64decode(os.getenv("FIREBASE_CREDS_BASE64")).decode("utf-8")
 
-# Use environment variable for Firebase credentials path
-firebase_cred_path = os.getenv("FIREBASE_CREDENTIALS")
-cred = credentials.Certificate(firebase_cred_path)
+# Convert string to dictionary
+firebase_config = json.loads(firebase_creds)
+
+# Initialize Firebase
+cred = credentials.Certificate(firebase_config)
 firebase_admin.initialize_app(cred)
 
 # Initialize Firestore
