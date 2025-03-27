@@ -14,16 +14,24 @@ client = genai.Client(api_key=GEMINI_API_KEY)
 def analyze_with_gemini(text):
     try:
         response = client.models.generate_content(
-            model="gemini-2.0-flash",
-            contents=f"""
-            Analyze the following text for hate speech.
-            Provide the result in JSON format with two fields:
-            - "score" (0-100) indicating how hateful it is.
-            - "sentiment" (1-5 words describing the sentiment).
+    model="gemini-2.0-flash",
+    contents=f"""
+        Analyze the following text for **any form of harmful, offensive, or inappropriate content**,
+        making it suitable for all audiences, including children.
 
-            Text: {text}
-            """
-        )
+        Consider the following:
+        - **Hate speech:** slurs, derogatory language, or harmful stereotypes.
+        - **Insults or rudeness:** personal attacks, name-calling, or condescending remarks.
+        - **Explicit content:** violent, sexual, or otherwise inappropriate material.
+        - **Negative sentiment:** overly aggressive or mean-spirited language.
+
+        Provide the result in JSON format with two fields:
+        - "score" (0-100) indicating how inappropriate the content is.
+        - "sentiment" (1-5 words describing the sentiment).
+
+        Text: {text}
+        """
+    )
 
         # Extract the response text
         response_text = response.candidates[0].content.parts[0].text.strip()
