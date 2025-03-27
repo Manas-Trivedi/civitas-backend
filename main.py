@@ -7,6 +7,7 @@ from gemini_api import analyze_with_gemini
 from reddit_fetch import router as reddit_router  # Reddit fetching router
 from transformers import pipeline, AutoTokenizer, AutoModelForSequenceClassification
 import uuid
+from fastapi.responses import JSONResponse
 
 # Initialize FastAPI app
 app = FastAPI()
@@ -17,6 +18,7 @@ app.add_middleware(
     allow_origins=[
         "https://civitas-ai.netlify.app",
         "https://civitas-backend.onrender.com",
+        "http://localhost:5173",  # Added localhost for local development
     ],
     allow_credentials=True,
     allow_methods=["*"],
@@ -105,3 +107,15 @@ def get_flagged_posts():
         flagged_posts.append(post.to_dict())
 
     return flagged_posts
+
+# Route to delete a flagged post
+@app.delete("/flagged/{post_id}")
+def delete_flagged_post(post_id: str):
+    try:
+        doc_ref = db.collection("flagged_posts").document(post_id)
+        if not doc_ref.get().exists:
+            raise HTTPException(status_code=404, detail="Post not found")
+        doc_ref.delete()
+        return JSONResponse(content={"message": "Post deleted successfully"}, status_code=200)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error deleting post: {str(e)}")
