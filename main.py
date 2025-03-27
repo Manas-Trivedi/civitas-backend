@@ -119,3 +119,7 @@ def delete_flagged_post(post_id: str):
         return JSONResponse(content={"message": "Post deleted successfully"}, status_code=200)
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error deleting post: {str(e)}")
+
+@app.get("/ping", methods=["GET", "HEAD"])
+def ping():
+    return JSONResponse(content={"message": "Server is running"}, status_code=200)
