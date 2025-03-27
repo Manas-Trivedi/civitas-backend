@@ -108,18 +108,6 @@ def get_flagged_posts():
 
     return flagged_posts
 
-# Route to delete a flagged post
-@app.delete("/flagged/{post_id}")
-def delete_flagged_post(post_id: str):
-    try:
-        doc_ref = db.collection("flagged_posts").document(post_id)
-        if not doc_ref.get().exists:
-            raise HTTPException(status_code=404, detail="Post not found")
-        doc_ref.delete()
-        return JSONResponse(content={"message": "Post deleted successfully"}, status_code=200)
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Error deleting post: {str(e)}")
-
-@app.get("/ping", methods=["GET", "HEAD"])
+@app.api_route("/ping", methods=["GET", "HEAD"])
 def ping():
     return JSONResponse(content={"message": "Server is running"}, status_code=200)
