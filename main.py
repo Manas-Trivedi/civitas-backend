@@ -104,9 +104,21 @@ def get_flagged_posts():
     posts_ref = db.collection("flagged_posts").stream()
 
     for post in posts_ref:
-        flagged_posts.append(post.to_dict())
+        post_data = post.to_dict()
+        post_data["post_id"] = post.id  # Include the post_id in the response
+        flagged_posts.append(post_data)
 
     return flagged_posts
+
+# Route to delete a flagged post
+@app.delete("/flagged/{post_id}")
+def delete_flagged_post(post_id: str):
+    doc_ref = db.collection("flagged_posts").document(post_id)
+    if not doc_ref.get().exists:
+        raise HTTPException(status_code=404, detail="Post not found")
+
+    doc_ref.delete()
+    return {"message": f"Post with ID {post_id} has been deleted"}
 
 @app.api_route("/ping", methods=["GET", "HEAD"])
 def ping():
